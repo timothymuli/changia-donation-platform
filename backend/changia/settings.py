@@ -48,6 +48,7 @@ INSTALLED_APPS = [
     "users",
     "campaigns",
     "donations",
+    "logs",
 ]
 
 MIDDLEWARE = [

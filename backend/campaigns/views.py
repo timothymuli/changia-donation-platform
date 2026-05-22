@@ -4,6 +4,7 @@ from rest_framework.views import APIView
 from rest_framework.permissions import IsAuthenticated
 from .models import Campaign
 from .serializers import CampaignSerializer
+from logs.utils import create_log
 
 class CampaignListCreateView(APIView):
     permission_classes = [IsAuthenticated]
@@ -16,7 +17,8 @@ class CampaignListCreateView(APIView):
     def post(self, request):
         serializer = CampaignSerializer(data=request.data)
         if serializer.is_valid():
-            serializer.save(creator=request.user)
+            campaign = serializer.save(creator=request.user)
+            create_log(request.user, 'CREATE_CAMPAIGN', f'Campaign created: {campaign.title}')
             return Response({
                 'message': 'Campaign created successfully',
                 'campaign': serializer.data
@@ -47,6 +49,7 @@ class CampaignDetailView(APIView):
         serializer = CampaignSerializer(campaign, data=request.data, partial=True)
         if serializer.is_valid():
             serializer.save()
+            create_log(request.user, 'UPDATE_CAMPAIGN', f'Campaign updated: {campaign.title}')
             return Response({
                 'message': 'Campaign updated successfully',
                 'campaign': serializer.data
@@ -57,5 +60,6 @@ class CampaignDetailView(APIView):
         campaign = self.get_object(pk, request.user)
         if not campaign:
             return Response({'error': 'Campaign not found'}, status=status.HTTP_404_NOT_FOUND)
+        create_log(request.user, 'DELETE_CAMPAIGN', f'Campaign deleted: {campaign.title}')
         campaign.delete()
         return Response({'message': 'Campaign deleted successfully'}, status=status.HTTP_204_NO_CONTENT)
