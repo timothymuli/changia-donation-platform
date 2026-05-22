@@ -46,6 +46,7 @@ INSTALLED_APPS = [
     "corsheaders",
     # Our apps
     "users",
+    "campaigns",
 ]
 
 MIDDLEWARE = [
@@ -133,3 +134,18 @@ STATIC_URL = "static/"
 CORS_ALLOW_ALL_ORIGINS = True
 
 AUTH_USER_MODEL = 'users.User'
+
+
+
+from datetime import timedelta
+
+SIMPLE_JWT = {
+    'ACCESS_TOKEN_LIFETIME': timedelta(minutes=60),
+    'REFRESH_TOKEN_LIFETIME': timedelta(days=1),
+}
+
+REST_FRAMEWORK = {
+    'DEFAULT_AUTHENTICATION_CLASSES': (
+        'rest_framework_simplejwt.authentication.JWTAuthentication',
+    )
+}
