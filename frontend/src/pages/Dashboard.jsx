@@ -29,6 +29,12 @@ const Dashboard = () => {
                 >
                     My Campaigns
                 </button>
+                <button
+                    onClick={() => navigate("/donate")}
+                    style={{ padding: "10px 20px", backgroundColor: "#0000FF", color: "white", border: "none", cursor: "pointer" }}
+                >
+                    Donate to a Campaign
+                </button>
             </div>
         </div>
     );
